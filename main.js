@@ -4,7 +4,9 @@ import {
   WebGL1Renderer,
   BoxGeometry,
   MeshBasicMaterial,
-  Mesh
+  Mesh,
+  PlaneGeometry,
+  DoubleSide
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import WEBGL from 'three/examples/jsm/capabilities/WebGL'
@@ -21,21 +23,27 @@ const renderer = new WebGL1Renderer()
 const controls = new OrbitControls(camera, renderer.domElement)
 
 renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setPixelRatio(devicePixelRatio)
 document.getElementById('app').appendChild(renderer.domElement)
 
-const geomatry = new BoxGeometry()
-const material = new MeshBasicMaterial({ color: 0xffaa45 })
-const cube = new Mesh(geomatry, material)
+const boxGeomatry = new BoxGeometry(2, 1, 2)
+const planeGeometry = new PlaneGeometry(5, 5, 10, 10)
+const material = new MeshBasicMaterial({ color: 0x0ff0f5 })
+const material2 = new MeshBasicMaterial({ color: 0xffff00, side: DoubleSide })
+const cube = new Mesh(boxGeomatry, material)
+const plane = new Mesh(planeGeometry, material2)
 
 scen.add(cube)
+scen.add(plane)
 scen.add(controls)
-camera.position.z = 5
+camera.position.z = 10
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
 
   renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.setPixelRatio(devicePixelRatio)
 }
 
 function animate() {
